@@ -63,7 +63,7 @@ impl<T: Hasher> PartialTree<T> {
         // It is iterating to full_tree_depth instead of partial_layers.len to address the case
         // of applying changes to a tree when tree requires a resize, and partial layer len
         // in that case going to be lower that the resulting tree depth
-        for _ in 0..full_tree_depth {
+        for d in 0..full_tree_depth {
             // Appending helper nodes to the current known nodes
             if let Some(mut nodes) = reversed_layers.pop() {
                 current_layer.append(&mut nodes);
@@ -82,7 +82,7 @@ impl<T: Hasher> PartialTree<T> {
                     // Populate `current_layer` back for the next iteration
                     Some(left_node) => current_layer.push((
                         *parent_node_index,
-                        T::concat_and_hash(left_node, nodes.get(i * 2 + 1)),
+                        T::concat_and_hash(left_node, nodes.get(i * 2 + 1), d),
                     )),
                     None => return Err(Error::not_enough_helper_nodes()),
                 }

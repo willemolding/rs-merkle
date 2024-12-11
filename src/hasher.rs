@@ -54,9 +54,12 @@ pub trait Hasher: Clone {
     /// if the left node doesn't have a sibling it is concatenated to itself and
     /// then hashed instead of just being propagated to the next level.
     ///
+    /// `concact_and_hash` can also use a function of depth.
+    /// This allows using virtual zero node padding as in the SSZ Merkle tree implementation.
+    ///
     /// [`MerkleTree`]: crate::MerkleTree
     /// [`PartialTree`]: crate::PartialTree
-    fn concat_and_hash(left: &Self::Hash, right: Option<&Self::Hash>) -> Self::Hash {
+    fn concat_and_hash(left: &Self::Hash, right: Option<&Self::Hash>, _depth: usize) -> Self::Hash {
         let mut concatenated: Vec<u8> = (*left).into();
 
         match right {
